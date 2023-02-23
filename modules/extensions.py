@@ -7,7 +7,7 @@ import git
 
 from modules import paths, shared
 
-extensions = []
+extensions = []  # list<Extension>
 extensions_dir = os.path.join(paths.data_path, "extensions")
 extensions_builtin_dir = os.path.join(paths.script_path, "extensions-builtin")
 
@@ -84,6 +84,9 @@ class Extension:
 
 
 def list_extensions():
+    """
+    将"./extensions"目录下的插件赋给本模块变量extensions
+    """
     extensions.clear()
 
     if not os.path.isdir(extensions_dir):

@@ -17,7 +17,7 @@ from modules import localization, extensions, script_loading, errors, ui_compone
 from modules.paths import models_path, script_path, data_path
 
 
-demo = None
+demo = None  # gradio ui
 
 sd_configs_path = os.path.join(script_path, "configs")
 sd_default_config = os.path.join(sd_configs_path, "v1-inference.yaml")

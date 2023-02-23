@@ -10,6 +10,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from packaging import version
 
 import logging
+
 logging.getLogger("xformers").addFilter(lambda record: 'A matching Triton is not available' not in record.getMessage())
 
 from modules import import_hook, errors, extra_networks, ui_extra_networks_checkpoints
@@ -44,7 +45,6 @@ import modules.ui
 from modules import modelloader
 from modules.shared import cmd_opts
 import modules.hypernetworks.hypernetwork
-
 
 if cmd_opts.server_name:
     server_name = cmd_opts.server_name
@@ -84,6 +84,9 @@ Use --skip-version-check commandline argument to disable this check.
 
 
 def initialize():
+    """
+    模块准备
+    """
     check_versions()
 
     extensions.list_extensions()
@@ -162,6 +165,7 @@ def setup_cors(app):
         app.add_middleware(CORSMiddleware, allow_origin_regex=cmd_opts.cors_allow_origins_regex, allow_methods=['*'], allow_credentials=True, allow_headers=['*'])
 
 
+# 注册API
 def create_api(app):
     from modules.api.api import Api
     api = Api(app, queue_lock)
@@ -179,6 +183,7 @@ def wait_on_server(demo=None):
             break
 
 
+# 默认 127.0.0.1:7861
 def api_only():
     initialize()
 
@@ -251,6 +256,7 @@ def webui():
         wait_on_server(shared.demo)
         print('Restarting UI...')
 
+        # 后面都是些处理reload的逻辑
         sd_samplers.set_samplers()
 
         modules.script_callbacks.script_unloaded_callback()
