@@ -85,10 +85,13 @@ except Exception:
 
 
 def setup_model():
+    """
+    models文件夹下的模型
+    """
     if not os.path.exists(model_path):
         os.makedirs(model_path)
 
-    list_models()
+    list_models()  # 注册到全局变量 checkpoints_list checkpoint_alisases
     enable_midas_autodownload()
 
 
@@ -103,6 +106,9 @@ def checkpoint_tiles():
 
 
 def list_models():
+    """
+    models文件下的模型(本地没有则download)注册到全局变量 checkpoints_list checkpoint_alisases
+    """
     checkpoints_list.clear()
     checkpoint_alisases.clear()
 
@@ -124,7 +130,7 @@ def list_models():
 
     for filename in model_list:
         checkpoint_info = CheckpointInfo(filename)
-        checkpoint_info.register()
+        checkpoint_info.register()  # 注册到 checkpoints_list and checkpoint_alisases
 
 
 def get_closet_checkpoint_match(search_string):
