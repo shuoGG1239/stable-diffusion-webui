@@ -65,6 +65,9 @@ class Extension:
         return res
 
     def check_updates(self):
+        """
+        git fetch --dry-run
+        """
         repo = git.Repo(self.path)
         for fetch in repo.remote().fetch("--dry-run"):
             if fetch.flags != fetch.HEAD_UPTODATE:
@@ -76,6 +79,10 @@ class Extension:
         self.status = "latest"
 
     def fetch_and_reset_hard(self):
+        """
+        git fetch -all
+        git reset --hard origin
+        """
         repo = git.Repo(self.path)
         # Fix: `error: Your local changes to the following files would be overwritten by merge`,
         # because WSL2 Docker set 755 file permissions instead of 644, this results to the error.

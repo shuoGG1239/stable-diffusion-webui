@@ -180,6 +180,9 @@ def version_check(commit):
 
 
 def run_extension_installer(extension_dir):
+    """
+    python install.py
+    """
     path_installer = os.path.join(extension_dir, "install.py")
     if not os.path.isfile(path_installer):
         return

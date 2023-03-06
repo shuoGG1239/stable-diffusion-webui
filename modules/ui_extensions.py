@@ -19,6 +19,9 @@ available_extensions = {"extensions": []}
 
 
 def check_access():
+    """
+    cmd args: --disable_extension_access
+    """
     assert not shared.cmd_opts.disable_extension_access, "extension access disabled because of command line flags"
 
 
@@ -51,6 +54,9 @@ def apply_and_restart(disable_list, update_list):
 
 
 def check_updates(id_task, disable_list):
+    """
+    遍历global extensions: git fetch --dry-run
+    """
     check_access()
 
     disabled = json.loads(disable_list)
@@ -113,6 +119,9 @@ def extension_table():
 
 
 def normalize_git_url(url):
+    """
+    remove .git
+    """
     if url is None:
         return ""
 
@@ -121,6 +130,9 @@ def normalize_git_url(url):
 
 
 def install_extension_from_url(dirname, url):
+    """
+    git clone to dirname; python dirname/install.py
+    """
     check_access()
 
     assert url, 'No URL specified'
@@ -159,7 +171,7 @@ def install_extension_from_url(dirname, url):
                 raise(err)
 
         import launch
-        launch.run_extension_installer(target_dir)
+        launch.run_extension_installer(target_dir)  # python install.py
 
         extensions.list_extensions()
         return [extension_table(), html.escape(f"Installed into {target_dir}. Use Installed tab to restart.")]
