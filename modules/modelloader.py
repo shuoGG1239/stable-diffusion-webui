@@ -12,6 +12,7 @@ from modules.paths import script_path, models_path
 
 def load_models(model_path: str, model_url: str = None, command_path: str = None, ext_filter=None, download_name=None, ext_blacklist=None) -> list:
     """
+    加载或下载模型, 最后返回模型的path
     A one-and done loader to try finding the desired models in specified directories.
 
     @param download_name: Specify to download from model_url immediately.
@@ -59,6 +60,7 @@ def load_models(model_path: str, model_url: str = None, command_path: str = None
 
         if model_url is not None and len(output) == 0:
             if download_name is not None:
+                # 下载并返回文件path
                 dl = load_file_from_url(model_url, model_path, True, download_name)
                 output.append(dl)
             else:
@@ -71,6 +73,9 @@ def load_models(model_path: str, model_url: str = None, command_path: str = None
 
 
 def friendly_name(file: str):
+    """
+    返回文件名(无后缀)
+    """
     if "http" in file:
         file = urlparse(file).path
 
@@ -80,11 +85,14 @@ def friendly_name(file: str):
 
 
 def cleanup_models():
+    """
+    将散落的模型文件搬到./models
+    """
     # This code could probably be more efficient if we used a tuple list or something to store the src/destinations
     # and then enumerate that, but this works for now. In the future, it'd be nice to just have every "model" scaler
     # somehow auto-register and just do these things...
-    root_path = script_path
-    src_path = models_path
+    root_path = script_path  # C:/c_git_project/stable-diffusion-webui
+    src_path = models_path   # C:/c_git_project/stable-diffusion-webui/models
     dest_path = os.path.join(models_path, "Stable-diffusion")
     move_files(src_path, dest_path, ".ckpt")
     move_files(src_path, dest_path, ".safetensors")

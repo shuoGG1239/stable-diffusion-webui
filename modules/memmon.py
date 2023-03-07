@@ -6,6 +6,9 @@ import torch
 
 
 class MemUsageMonitor(threading.Thread):
+    """
+    device内存监控线程 torch.cuda.memory_stats(device)
+    """
     run_flag = None
     device = None
     disabled = False
