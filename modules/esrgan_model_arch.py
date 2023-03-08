@@ -13,6 +13,9 @@ import torch.nn.functional as F
 ####################
 
 class RRDBNet(nn.Module):
+    """
+    给 UpscalerESRGAN.load_model时调整模型时用的
+    """
     def __init__(self, in_nc, out_nc, nf, nb, nr=3, gc=32, upscale=4, norm_type=None,
             act_type='leakyrelu', mode='CNA', upsample_mode='upconv', convtype='Conv2D',
             finalact=None, gaussian_noise=False, plus=False):
@@ -64,6 +67,8 @@ class RRDBNet(nn.Module):
 
 class RRDB(nn.Module):
     """
+    给RRDBNet用的
+
     Residual in Residual Dense Block
     (ESRGAN: Enhanced Super-Resolution Generative Adversarial Networks)
     """

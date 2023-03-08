@@ -56,6 +56,7 @@ def get_optimal_device():
 def get_device_for(task):
     """
     task: 'scunet' 'swinir'
+    return: 最合适的torch.device
     """
     from modules import shared
 

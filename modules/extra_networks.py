@@ -3,14 +3,20 @@ from collections import defaultdict
 
 from modules import errors
 
-extra_network_registry = {}
+extra_network_registry = {}  # map[string]ExtraNetwork
 
 
 def initialize():
+    """
+    系统初始化阶段会调用
+    """
     extra_network_registry.clear()
 
 
 def register_extra_network(extra_network):
+    """
+    系统初始化阶段会调用
+    """
     extra_network_registry[extra_network.name] = extra_network
 
 
@@ -20,11 +26,16 @@ class ExtraNetworkParams:
 
 
 class ExtraNetwork:
+    """
+    接口. 实现有 ExtraNetworkHypernet, ExtraNetworkLora
+    """
     def __init__(self, name):
         self.name = name
 
     def activate(self, p, params_list):
         """
+        p: StableDiffusionProcessing (目前实现类中都只用到了 StableDiffusionProcessing.all_prompts)
+
         Called by processing on every run. Whatever the extra network is meant to do should be activated here.
         Passes arguments related to this extra network in params_list.
         User passes arguments by specifying this in his prompt:
@@ -72,6 +83,7 @@ def activate(p, extra_network_data):
             continue
 
         try:
+            # extra_network is implemented object of ExtraNetwork
             extra_network.activate(p, extra_network_args)
         except Exception as e:
             errors.display(e, f"activating extra network {extra_network_name} with arguments {extra_network_args}")
@@ -116,6 +128,9 @@ re_extra_net = re.compile(r"<(\w+):([^>]+)>")
 
 
 def parse_prompt(prompt):
+    """
+
+    """
     res = defaultdict(list)
 
     def found(m):

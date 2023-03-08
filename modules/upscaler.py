@@ -53,6 +53,9 @@ class Upscaler:
 
     @abstractmethod
     def do_upscale(self, img: PIL.Image, selected_model: str):
+        """
+        selected_model: 某类型的Upscaler也可以有不同版本的model, 所以要提供selected
+        """
         return img
 
     def upscale(self, img: PIL.Image, scale, selected_model: str = None):

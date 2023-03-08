@@ -136,11 +136,14 @@ def move_files(src_path: str, dest_path: str, ext_filter: str = None):
         pass
 
 
-builtin_upscaler_classes = []
-forbidden_upscaler_classes = set()
+builtin_upscaler_classes = []  # 内置Upscaler的子类
+forbidden_upscaler_classes = set()  # 禁用的Upscaler子类
 
 
 def list_builtin_upscalers():
+    """
+    赋值给global builtin_upscaler_classes
+    """
     load_upscalers()
 
     builtin_upscaler_classes.clear()
@@ -154,6 +157,9 @@ def forbid_loaded_nonbuiltin_upscalers():
 
 
 def load_upscalers():
+    """
+    动态导入Upscaler字类并实例化后赋值给 shared.sd_upscalers
+    """
     # We can only do this 'magic' method to dynamically load upscalers if they are referenced,
     # so we'll try to import any _model.py files before looking in __subclasses__
     modules_dir = os.path.join(shared.script_path, "modules")

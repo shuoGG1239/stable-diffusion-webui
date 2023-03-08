@@ -8,6 +8,9 @@ from modules import devices
 
 
 class DeepDanbooruModel(nn.Module):
+    """
+    模型架构, 超参数
+    """
     def __init__(self):
         super(DeepDanbooruModel, self).__init__()
 

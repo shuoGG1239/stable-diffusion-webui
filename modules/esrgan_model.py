@@ -13,6 +13,9 @@ from modules.shared import opts
 
 
 def mod2normal(state_dict):
+    """
+    修整模型的参数并返回, 只在UpscalerESRGAN.load_model用到1次
+    """
     # this code is copied from https://github.com/victorca25/iNNfer
     if 'conv_first.weight' in state_dict:
         crt_net = {}
@@ -48,6 +51,9 @@ def mod2normal(state_dict):
 
 
 def resrgan2normal(state_dict, nb=23):
+    """
+    修整模型的参数并返回, 只在UpscalerESRGAN.load_model用到1次
+    """
     # this code is copied from https://github.com/victorca25/iNNfer
     if "conv_first.weight" in state_dict and "body.0.rdb1.conv1.weight" in state_dict:
         re8x = 0
@@ -125,6 +131,9 @@ def infer_params(state_dict):
 
 
 class UpscalerESRGAN(Upscaler):
+    """
+    load ESRGAN.pth
+    """
     def __init__(self, dirname):
         self.name = "ESRGAN"
         self.model_url = "https://github.com/cszn/KAIR/releases/download/v1.0/ESRGAN.pth"
@@ -155,6 +164,9 @@ class UpscalerESRGAN(Upscaler):
         return img
 
     def load_model(self, path: str):
+        """
+        将模型的state_dict加载出来, 修正下再返回model (torch.Module)
+        """
         if "http" in path:
             filename = load_file_from_url(url=self.model_url, model_dir=self.model_path,
                                           file_name="%s.pth" % self.model_name,
@@ -195,6 +207,11 @@ class UpscalerESRGAN(Upscaler):
 
 
 def upscale_without_tiling(model, img):
+    """
+    不分块处理, 直接Upscale
+    model: torch.Module
+    return: img
+    """
     img = np.array(img)
     img = img[:, :, ::-1]
     img = np.ascontiguousarray(np.transpose(img, (2, 0, 1))) / 255

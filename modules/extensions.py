@@ -67,6 +67,7 @@ class Extension:
     def check_updates(self):
         """
         git fetch --dry-run
+        if HEAD_UPTODATE
         """
         repo = git.Repo(self.path)
         for fetch in repo.remote().fetch("--dry-run"):
