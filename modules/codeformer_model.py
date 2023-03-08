@@ -18,10 +18,13 @@ model_path = os.path.join(models_path, model_dir)
 model_url = 'https://github.com/sczhou/CodeFormer/releases/download/v0.1.0/codeformer.pth'
 
 have_codeformer = False
-codeformer = None
+codeformer = None  # codeformer是一个脸部修复模型
 
 
 def setup_model(dirname):
+    """
+    下载安装codeformer到./Codeformer, 实例化后赋值到global codeformer和shared.face_restorers
+    """
     global model_path
     if not os.path.exists(model_path):
         os.makedirs(model_path)
