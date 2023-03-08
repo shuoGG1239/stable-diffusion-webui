@@ -269,7 +269,7 @@ prompt_styles = modules.styles.StyleDatabase(styles_filename)
 
 interrogator = modules.interrogate.InterrogateModels("interrogate")
 
-face_restorers = []
+face_restorers = []  # List<face_restoration.FaceRestoration>
 
 class OptionInfo:
     def __init__(self, default=None, label="", component=None, component_args=None, onchange=None, section=None, refresh=None):

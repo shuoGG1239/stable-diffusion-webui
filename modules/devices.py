@@ -8,6 +8,9 @@ if sys.platform == "darwin":
 
 
 def has_mps() -> bool:
+    """
+    mac GPU加速
+    """
     if sys.platform != "darwin":
         return False
     else:
@@ -31,6 +34,9 @@ def get_cuda_device_string():
 
 
 def get_optimal_device_name():
+    """
+    return: "cpu" "cuda" "mps"
+    """
     if torch.cuda.is_available():
         return get_cuda_device_string()
 
@@ -41,10 +47,16 @@ def get_optimal_device_name():
 
 
 def get_optimal_device():
+    """
+    return: 最合适的torch.device
+    """
     return torch.device(get_optimal_device_name())
 
 
 def get_device_for(task):
+    """
+    task: 'scunet' 'swinir'
+    """
     from modules import shared
 
     if task in shared.cmd_opts.use_cpu:
@@ -54,6 +66,9 @@ def get_device_for(task):
 
 
 def torch_gc():
+    """
+    cuda GC
+    """
     if torch.cuda.is_available():
         with torch.cuda.device(get_cuda_device_string()):
             torch.cuda.empty_cache()
@@ -61,6 +76,9 @@ def torch_gc():
 
 
 def enable_tf32():
+    """
+    Tensor Float 32
+    """
     if torch.cuda.is_available():
 
         # enabling benchmark option seems to enable a range of cards to do fp16 when they otherwise can't
@@ -105,18 +123,25 @@ def randn_without_seed(shape):
 
 
 def autocast(disable=False):
+    """
+    开启torch的autocast
+    """
     from modules import shared
 
     if disable:
         return contextlib.nullcontext()
 
     if dtype == torch.float32 or shared.cmd_opts.precision == "full":
+        # 指定全精度就没必要开启autocast了
         return contextlib.nullcontext()
 
     return torch.autocast("cuda")
 
 
 def without_autocast(disable=False):
+    """
+    关闭torch的autocast
+    """
     return torch.autocast("cuda", enabled=False) if torch.is_autocast_enabled() and not disable else contextlib.nullcontext()
 
 
@@ -125,6 +150,10 @@ class NansException(Exception):
 
 
 def test_for_nans(x, where):
+    """
+    空模型检查
+    where: "unet", "vae"
+    """
     from modules import shared
 
     if shared.cmd_opts.disable_nan_check:

@@ -12,9 +12,12 @@ re_special = re.compile(r'([\\()])')
 
 class DeepDanbooru:
     def __init__(self):
-        self.model = None
+        self.model = None  # cuda.nn.Module | DeepDanbooruModel
 
     def load(self):
+        """
+        从./torch_deepdanbooru加载模型
+        """
         if self.model is not None:
             return
 
@@ -26,6 +29,8 @@ class DeepDanbooru:
         )
 
         self.model = deepbooru_model.DeepDanbooruModel()
+        # torch.load(model-resnet_custom_v3.pt) , 取['tags']赋值给 model.tags, 即tags的总集
+        # tag(self, pil_image)本质就是在上面的tags总集里面做过滤
         self.model.load_state_dict(torch.load(files[0], map_location="cpu"))
 
         self.model.eval()
@@ -41,6 +46,10 @@ class DeepDanbooru:
             devices.torch_gc()
 
     def tag(self, pil_image):
+        """
+        输入图片, 输出tags
+        return: list<str>
+        """
         self.start()
         res = self.tag_multi(pil_image)
         self.stop()
@@ -48,6 +57,10 @@ class DeepDanbooru:
         return res
 
     def tag_multi(self, pil_image, force_disable_ranks=False):
+        """
+        输入图片, 输出tags
+        return: list<str>
+        """
         threshold = shared.opts.interrogate_deepbooru_score_threshold
         use_spaces = shared.opts.deepbooru_use_spaces
         use_escape = shared.opts.deepbooru_escape
@@ -59,6 +72,7 @@ class DeepDanbooru:
 
         with torch.no_grad(), devices.autocast():
             x = torch.from_numpy(a).to(devices.device)
+            # 'y' is list of probability
             y = self.model(x)[0].detach().cpu().numpy()
 
         probability_dict = {}

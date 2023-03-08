@@ -17,6 +17,10 @@ loaded_gfpgan_model = None
 
 
 def gfpgann():
+    """
+    gfpgann用于人脸修复.
+    return gfpgan.GFPGANer
+    """
     global loaded_gfpgan_model
     global model_path
     if loaded_gfpgan_model is not None:
@@ -44,12 +48,19 @@ def gfpgann():
 
 
 def send_model_to(model, device):
+    """
+    model: implement of FaceRestoration
+    device: torch.device
+    """
     model.gfpgan.to(device)
     model.face_helper.face_det.to(device)
     model.face_helper.face_parse.to(device)
 
 
 def gfpgan_fix_faces(np_image):
+    """
+    gfpgan人脸修复
+    """
     model = gfpgann()
     if model is None:
         return np_image
@@ -72,6 +83,9 @@ gfpgan_constructor = None
 
 
 def setup_model(dirname):
+    """
+    下载安装GFPGAN到./GFPGAN, 模型对象赋值append给shared.face_restorers
+    """
     global model_path
     if not os.path.exists(model_path):
         os.makedirs(model_path)

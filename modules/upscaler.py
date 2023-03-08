@@ -14,6 +14,9 @@ NEAREST = (Image.Resampling.NEAREST if hasattr(Image, 'Resampling') else Image.N
 
 
 class Upscaler:
+    """
+    图片缩放Upscaler接口: 实现有UpscalerLanczos, UpscalerNearest, UpscalerESRGAN (前2是传统图像处理)
+    """
     name = None
     model_path = None
     model_name = None
@@ -116,6 +119,9 @@ class UpscalerNone(Upscaler):
 
 
 class UpscalerLanczos(Upscaler):
+    """
+    传统缩放算法, pillow自带
+    """
     scalers = []
 
     def do_upscale(self, img, selected_model=None):
@@ -131,6 +137,9 @@ class UpscalerLanczos(Upscaler):
 
 
 class UpscalerNearest(Upscaler):
+    """
+    传统缩放算法, pillow自带
+    """
     scalers = []
 
     def do_upscale(self, img, selected_model=None):
